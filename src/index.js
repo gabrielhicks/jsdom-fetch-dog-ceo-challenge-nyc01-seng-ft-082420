@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded" , () => {
 })
 
 let dogBreeds = []
+let dogSelect = []
 
 function eventHandler () {
+
     const breedContainer = document.querySelector("#dog-breeds")
     breedContainer.addEventListener("click", e => {
         const breedLi = e.target
@@ -25,6 +27,7 @@ function eventHandler () {
             }
         }
     }
+
 }
 
 function fetchBreed () {
@@ -35,8 +38,36 @@ function fetchBreed () {
         for(breed in breeds.message) {
             dogBreeds.push(breed)
         }
+        populateSelectors();
     })
 }
+
+function populateSelectors() {
+    for(let breed in dogBreeds) {
+        let dog = dogBreeds[breed]
+        if(dogSelect.includes(dog[0])) {
+            continue
+        } else {
+            dogSelect.push(dog[0]);
+        }
+    }
+    createDropDown();
+}
+
+function createDropDown() {
+    const dropDownOptions = document.querySelector("#breed-dropdown")
+    let options = dropDownOptions.options
+    for(let each in dogSelect) {
+        const letter = dogSelect[each]
+        if(options[each] != dogSelect[each]) {
+            let newOption = document.createElement("option")
+            newOption.value = dogSelect[each]
+            newOption.innerText = dogSelect[each]
+            dropDownOptions.append(newOption)
+        }
+    }
+}
+
 
 function fetchImg () {
     const imgUrl = "https://dog.ceo/api/breeds/image/random/4"
@@ -67,5 +98,3 @@ function renderDog(dog, container) {
     imgTag.src = dog;
     container.append(imgTag)
 }
-
-console.log(dogBreeds)
